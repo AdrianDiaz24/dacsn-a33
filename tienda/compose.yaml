@@ -1,0 +1,14 @@
+services:
+  tienda: 
+    prestashop/prestashop:8.2 // Mirar en Docker Hub, usar 8.2 no 9 com dice el enunciado ya que tiene un bug
+  
+  bd:
+
+  correo:
+
+
+volumes:
+
+
+networks:
+  interna:
