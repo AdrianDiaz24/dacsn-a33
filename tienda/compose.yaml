@@ -8,36 +8,57 @@ services:
       PS_COUNTRY: ES
       PS_FOLDER_ADMIN: admin-tienda
       PS_FOLDER_INSTALL: install-tienda
-      PS_DOMAIN: ${DIRECCION}:${PUERTO}
+      PS_DOMAIN: ${DIRECCION}:${PUERTO:-8080}
+      ADMIN_MAIL: ${CORREO:-demo@prestashop.com}
+      ADMIN_PASSWD: ${PS_PASSWD:-prestashop_demo}
+      DB_SERVER: bd
+      DB_NAME: ${BD_NAME:-prestashop}
+      DB_USER: ${BD_USER:-user}
+      DB_PASSWD: ${BD_PASSWD}
+
 
 
     volume:
       - ficherosTiendas:/var/www/html
-    networks:
+    networks: interna
     ports: "${PUERTO:-8080}:80"
     depends_on:
       - bd:
         condition: service_healthy
+      - correo:
+        condition: 
     restart: unless-stopped
   
   bd:
-    image: 
+    image: mariadb:11.8
     enviorements:
-      - PS_DEMO_MODE=0 
+      MARIADB_USER: ${BD_USER:-user}
+      MARIADB_PASSWORD: ${BD_PASSWD}
+      MARIADB_ROOT_PASSWORD: ${BD_ROOT_PASSWD:-root}
+      MARIADB_DATABASE: ${BD_NAME:-prestashop}
     volume:
-    networks:
-    ports:
+      - mariadb-datos:/car/lib/mysql
+    networks: interna
     healthcheck:
       test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
       interval: 5s
       timeout: 3s
       retries: 10
       start_period: 30s
-    depends_on:
-    restart: 
+    restart: unless-stopped
+
+  adminer:
+    image: adminer:5
+    profiles:
+      - herramientas
+    restart: unless-stopped
+    ports:
+      - ${PUERTO_ADMINER:-8081}:8080
+    networks: interna
 
   correo:
-
+    image: axllent/mailpit
+    restart: unless-stopped
 
 volumes:
   ficherosTienda
