@@ -40,11 +40,11 @@ services:
       FORGEJO__mailer__FROM: forgejo@dacsn.local
 
       FORGEJO__cache__ADAPTER: redis
-      FORGEJO__cache__HOST: redis://:${REDIS_CONTRASENA:?falta en el fichero .env}
+      FORGEJO__cache__HOST: redis://:${REDIS_CONTRASENA:?falta en el fichero .env}@cache:6379/0
       FORGEJO__session__PROVIDER: redis
-      FORGEJO__session__PROVIDER_CONFIG: redis://:${REDIS_CONTRASENA:?falta en el fichero .env}
+      FORGEJO__session__PROVIDER_CONFIG: redis://:${REDIS_CONTRASENA:?falta en el fichero .env}@cache:6379/0
       FORGEJO__queue__TYPE: redis
-      FORGEJO__queue__CONN_STR: redis://:${REDIS_CONTRASENA:?falta en el fichero .env}
+      FORGEJO__queue__CONN_STR: redis://:${REDIS_CONTRASENA:?falta en el fichero .env}@cache:6379/0
 
   bd:
     image: postgres:18
